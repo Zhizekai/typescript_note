@@ -4,7 +4,7 @@
 
 
     通俗的讲装饰器就是一个方法，可以注入到类、方法、属性参数上来扩展类、属性、方法、参数的功能。
-    
+
 
     常见的装饰器有：类装饰器、属性装饰器、方法装饰器、参数装饰器
 
@@ -78,7 +78,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
 */
 /*
-    
+
 1、类装饰器
 
      下面是一个重载构造函数的例子。
@@ -129,7 +129,7 @@ http.getData();
             return function(target:any){
                 // console.log(target);
                 // console.log(params);
-                
+
             }
         }
 
@@ -202,7 +202,7 @@ http.getData();
             console.log(target);
             console.log(methodName);
             console.log(desc.value);
-            
+
             //修改装饰器的方法  把装饰器方法里面传入的所有参数改为string类型
 
             //1、保存当前的方法
@@ -248,13 +248,13 @@ http.getData();
 //         console.log(methodName);
 //         console.log(paramsIndex);
 //         target.apiUrl=params;
-//     }   
+//     }
 // }
-// class HttpClient{  
+// class HttpClient{
 //             public url:any |undefined;
 //             constructor(){
-//             }           
-//             getData(@logParams('xxxxx') uuid:any){               
+//             }
+//             getData(@logParams('xxxxx') uuid:any){
 //                 console.log(uuid);
 //             }
 //  }

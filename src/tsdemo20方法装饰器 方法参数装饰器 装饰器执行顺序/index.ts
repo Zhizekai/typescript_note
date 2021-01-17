@@ -3,7 +3,7 @@
 
 
     通俗的讲装饰器就是一个方法，可以注入到类、方法、属性参数上来扩展类、属性、方法、参数的功能。
-    
+
 
     常见的装饰器有：类装饰器、属性装饰器、方法装饰器、参数装饰器
 
@@ -22,65 +22,63 @@
 
 
 //1.1 类装饰器:普通装饰器（无法传参）
-    /*
-        function logClass(params:any){
+/*
+    function logClass(params:any){
 
-            console.log(params);
-            // params 就是当前类
-            params.prototype.apiUrl='动态扩展的属性';
-            params.prototype.run=function(){
-                console.log('我是一个run方法');
-            }
-
+        console.log(params);
+        // params 就是当前类
+        params.prototype.apiUrl='动态扩展的属性';
+        params.prototype.run=function(){
+            console.log('我是一个run方法');
         }
 
-        @logClass
-        class HttpClient{
-            constructor(){
-            }
-            getData(){
+    }
 
-            }
+    @logClass
+    class HttpClient{
+        constructor(){
         }
-        var http:any=new HttpClient();
-        console.log(http.apiUrl);
-        http.run();
-    */
+        getData(){
+
+        }
+    }
+    var http:any=new HttpClient();
+    console.log(http.apiUrl);
+    http.run();
+*/
 
 
 //1.2 类装饰器:装饰器工厂（可传参）
 
-   
-    
-        
-       /*
-        function logClass(params:string){
-            return function(target:any){
-                console.log(target);
-                console.log(params);
-                target.prototype.apiUrl=params;
-            }
-        }
 
-        @logClass('http://www.itying.com/api')
-        class HttpClient{
-            constructor(){
-            }
+/*
+ function logClass(params:string){
+     return function(target:any){
+         console.log(target);
+         console.log(params);
+         target.prototype.apiUrl=params;
+     }
+ }
 
-            getData(){
+ @logClass('http://www.itying.com/api')
+ class HttpClient{
+     constructor(){
+     }
 
-            }
-        }
+     getData(){
 
-        var http:any=new HttpClient();
-        console.log(http.apiUrl);
-       
-       */  
+     }
+ }
+
+ var http:any=new HttpClient();
+ console.log(http.apiUrl);
+
+*/
 
 
 /*
-    
-1、类装饰器 
+
+1、类装饰器
 
      下面是一个重载构造函数的例子。
 
@@ -90,40 +88,34 @@
 */
 
 
-
-        /*
-        function logClass(target:any){
-            console.log(target);
-            return class extends target{
-                apiUrl:any='我是修改后的数据';
-                getData(){
-                    this.apiUrl=this.apiUrl+'----';
-                    console.log(this.apiUrl);
-                }
-            }
+/*
+function logClass(target:any){
+    console.log(target);
+    return class extends target{
+        apiUrl:any='我是修改后的数据';
+        getData(){
+            this.apiUrl=this.apiUrl+'----';
+            console.log(this.apiUrl);
         }
+    }
+}
 
 
-        @logClass
-        class HttpClient{
-            public apiUrl:string | undefined;
-            constructor(){
-                this.apiUrl='我是构造函数里面的apiUrl';
-            }
-            getData(){
-                console.log(this.apiUrl);
-            }
-        }
+@logClass
+class HttpClient{
+    public apiUrl:string | undefined;
+    constructor(){
+        this.apiUrl='我是构造函数里面的apiUrl';
+    }
+    getData(){
+        console.log(this.apiUrl);
+    }
+}
 
-        var http=new HttpClient();
-        http.getData();
+var http=new HttpClient();
+http.getData();
 
-        */
-
-
-
-
-
+*/
 
 
 /*
@@ -136,14 +128,13 @@
 */
 
 
-
 /*
     //类装饰器
         function logClass(params:string){
             return function(target:any){
                 // console.log(target);
-                // console.log(params);       
-                
+                // console.log(params);
+
             }
         }
 
@@ -171,9 +162,6 @@
 */
 
 
-
-
-
 /*
     3、方法装饰器
         它会被应用到方法的 属性描述符上，可以用来监视，修改或者替换方法定义。
@@ -183,9 +171,7 @@
             2、成员的名字。
             3、成员的属性描述符。
 
-*/   
-    
-
+*/
 
 
 /*
@@ -204,7 +190,7 @@
         }
     }
 
-    class HttpClient{  
+    class HttpClient{
         public url:any |undefined;
         constructor(){
         }
@@ -222,47 +208,46 @@
 
 //方法装饰器二
 
-    /*
-        function get(params:any){
-            return function(target:any,methodName:any,desc:any){
-                console.log(target);
-                console.log(methodName);
-                console.log(desc.value);       
-                
-                //修改装饰器的方法  把装饰器方法里面传入的所有参数改为string类型
+/*
+    function get(params:any){
+        return function(target:any,methodName:any,desc:any){
+            console.log(target);
+            console.log(methodName);
+            console.log(desc.value);
 
-                //1、保存当前的方法
+            //修改装饰器的方法  把装饰器方法里面传入的所有参数改为string类型
 
-                var oMethod=desc.value;
-                desc.value=function(...args:any[]){                
-                    args=args.map((value)=>{
-                        return String(value);
-                    })
-                    oMethod.apply(this,args);
-                }
+            //1、保存当前的方法
 
+            var oMethod=desc.value;
+            desc.value=function(...args:any[]){
+                args=args.map((value)=>{
+                    return String(value);
+                })
+                oMethod.apply(this,args);
             }
+
         }
+    }
 
-        class HttpClient{  
-            public url:any |undefined;
-            constructor(){
-            }
-            @get('http://www.itying,com')
-            getData(...args:any[]){
-                console.log(args);
-                console.log('我是getData里面的方法');
-            }
+    class HttpClient{
+        public url:any |undefined;
+        constructor(){
         }
+        @get('http://www.itying,com')
+        getData(...args:any[]){
+            console.log(args);
+            console.log('我是getData里面的方法');
+        }
+    }
 
-        var http=new HttpClient();
-        http.getData(123,'xxx');
-    */
-
+    var http=new HttpClient();
+    http.getData(123,'xxx');
+*/
 
 
 /*
-    4、方法参数装饰器 
+    4、方法参数装饰器
 
         参数装饰器表达式会在运行时当作函数被调用，可以使用参数装饰器为类的原型增加一些元素数据 ，传入下列3个参数：
 
@@ -287,15 +272,15 @@
 
 //         target.apiUrl=params;
 
-//     }   
+//     }
 
 // }
 
-// class HttpClient{  
+// class HttpClient{
 //             public url:any |undefined;
 //             constructor(){
-//             }           
-//             getData(@logParams('xxxxx') uuid:any){               
+//             }
+//             getData(@logParams('xxxxx') uuid:any){
 //                 console.log(uuid);
 //             }
 //  }
@@ -306,14 +291,6 @@
 // console.log( http.apiUrl);
 
 
-
-
-
-
-
-
-
-
 //装饰器执行顺序
 
 
@@ -322,75 +299,80 @@
 // 如果有多个同样的装饰器，它会先执行后面的
 
 
-function logClass1(params:string){
-    return function(target:any){
-      console.log('类装饰器1')
-    }
+function logClass1(params: string) {
+    return function (target: any) {
+        console.log('类装饰器1');
+    };
 }
 
-function logClass2(params:string){
-    return function(target:any){
-      console.log('类装饰器2')
-    }
+function logClass2(params: string) {
+    return function (target: any) {
+        console.log('类装饰器2');
+    };
 }
 
-function logAttribute1(params?:string){
-    return function(target:any,attrName:any){
-      console.log('属性装饰器1')
-    }
+function logAttribute1(params?: string) {
+    return function (target: any, attrName: any) {
+        console.log('属性装饰器1');
+    };
 }
 
-function logAttribute2(params?:string){
-    return function(target:any,attrName:any){
-      console.log('属性装饰器2')
-    }
+function logAttribute2(params?: string) {
+    return function (target: any, attrName: any) {
+        console.log('属性装饰器2');
+    };
 }
 
-function logMethod1(params?:string){
-    return function(target:any,attrName:any,desc:any){
-      console.log('方法装饰器1')
-    }
-}
-function logMethod2(params?:string){
-    return function(target:any,attrName:any,desc:any){
-      console.log('方法装饰器2')
-    }
+function logMethod1(params?: string) {
+    return function (target: any, attrName: any, desc: any) {
+        console.log('方法装饰器1');
+    };
 }
 
-
-
-function logParams1(params?:string){
-    return function(target:any,attrName:any,desc:any){
-      console.log('方法参数装饰器1')
-    }
+function logMethod2(params?: string) {
+    return function (target: any, attrName: any, desc: any) {
+        console.log('方法装饰器2');
+    };
 }
 
-function logParams2(params?:string){
-    return function(target:any,attrName:any,desc:any){
-      console.log('方法参数装饰器2')
-    }
+
+function logParams1(params?: string) {
+    return function (target: any, attrName: any, desc: any) {
+        console.log('方法参数装饰器1');
+    };
 }
 
+function logParams2(params?: string) {
+    return function (target: any, attrName: any, desc: any) {
+        console.log('方法参数装饰器2');
+    };
+}
 
 
 @logClass1('http://www.itying.com/api')
 @logClass2('xxxx')
-class HttpClient{
+class HttpClient {
     @logAttribute1()
     @logAttribute2()
-    public apiUrl:string | undefined;
-    constructor(){
+    public apiUrl: string | undefined;
+
+    constructor() {
     }
 
     @logMethod1()
     @logMethod2()
-    getData(){
+    getData() {
         return true;
     }
 
-    setData(@logParams1() attr1:any,@logParams2() attr2:any,){
+    setData(@logParams1() attr1: any, @logParams2() attr2: any,) {
 
     }
 }
 
-var http:any=new HttpClient();
+var http: any = new HttpClient();
+
+
+
+
+
